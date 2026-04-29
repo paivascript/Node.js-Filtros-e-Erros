@@ -5,11 +5,10 @@ class LivroController {
 
   static listarLivros = async (req, res, next) => {
     try {
-      const livrosResultado = await livros.find()
-        .populate("autor")
-        .exec();
+      const buscaLivros = livros.find();
 
-      res.status(200).json(livrosResultado);
+      req.resultado = buscaLivros;
+      next();
     } catch (erro) {
       next(erro);
     }
@@ -82,11 +81,12 @@ class LivroController {
       const busca = await processaBusca(req.query);
 
       if (busca !== null) {
-        const livrosResultado = await livros
+        const livrosResultado = livros
           .find(busca)
           .populate("autor");
-
-        res.status(200).send(livrosResultado);
+        req.resultado = livrosResultado;
+      
+        next();
       } else {
         res.status(200).send([]);
       }
@@ -104,12 +104,12 @@ async function processaBusca(parametros) {
   if (editora) busca.editora = editora;
   if (titulo) busca.titulo = { $regex: titulo, $options: "i" };
 
-  if (minPaginas || maxPaginas) busca.numeroPaginas = {};
+  if (minPaginas || maxPaginas) busca.paginas = {};
 
   // gte = Greater Than or Equal = Maior ou igual que
-  if (minPaginas) busca.numeroPaginas.$gte = minPaginas;
+  if (minPaginas) busca.paginas.$gte = minPaginas;
   // lte = Less Than or Equal = Menor ou igual que
-  if (maxPaginas) busca.numeroPaginas.$lte = maxPaginas;
+  if (maxPaginas) busca.paginas.$lte = maxPaginas;
 
   if (nomeAutor) {
     const autor = await autores.findOne({ nome: nomeAutor });

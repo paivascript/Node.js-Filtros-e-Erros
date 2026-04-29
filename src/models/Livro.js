@@ -20,7 +20,7 @@ const livroSchema = new mongoose.Schema(
         message: "A editora {VALUE} não é um valor permitido."
       }
     },
-    numeroPaginas: {
+    paginas: {
       type: Number,
       validate: {
         validator: (valor) => {
