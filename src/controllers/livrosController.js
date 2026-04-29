@@ -20,6 +20,7 @@ class LivroController {
 
       const livroResultado = await livros
         .findById(id, {}, { autopopulate: false })
+         .populate("autor"); 
         //.populate("autor", "nome");
 
       if (livroResultado !== null) {

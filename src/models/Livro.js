@@ -12,7 +12,8 @@ const livroSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "autores",
       required: [true, "O(a) autor(a) é obrigatório"],
-      autopopulate: true
+      //autopopulate: true
+      autopopulate:{select:"nome"}
     },
     editora: {
       type: String,
